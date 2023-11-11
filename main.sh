@@ -3,7 +3,7 @@
 #   呼伦贝尔学院 - 健康打卡 - 自动打卡脚本
 #       Another : 0xc0000142
 #       Date : 2023.11.11
-#       Version : Dev.2
+#       Version : Dev.3
 ##########################################
 load_config() {
     if [ -f "./config.env" ]; then
@@ -29,11 +29,6 @@ env() {
         cp config.user.env.exmple config.user${1}.env
         log "Generated Config"
         log "Please Modify Config.env and restart this script"
-        exit 1
-    fi
-    if [[ -z "${USERNAME}" ]]; then
-        log ERROR "Config Missing (USERNAME:) in config.user${1}.env  !"
-        log ERROR "Please Check Config!"
         exit 1
     fi
     if [[ -z "${LOGIN_DATA}" ]]; then
