@@ -3,7 +3,7 @@
 #   呼伦贝尔学院 - 健康打卡 - 自动打卡脚本
 #       Another : 0xc0000142
 #       Date : 2023.11.11
-#       Version : Dev.3
+#       Version : Dev.4
 ##########################################
 load_config() {
     if [ -f "./config.env" ]; then
@@ -13,6 +13,9 @@ load_config() {
     while (($USER <= $USER_COUNT)); do
         log "Loading Config config.user${USER}.env"
         env ${USER}
+        if [[ "${SKIP_RUN}" == "1" ]]; then
+            continue
+        fi
         main
         let USER++
     done
@@ -29,12 +32,13 @@ env() {
         cp config.user.env.exmple config.user${1}.env
         log "Generated Config"
         log "Please Modify Config.env and restart this script"
-        exit 1
+        SKIP_RUN=1
     fi
     if [[ -z "${LOGIN_DATA}" ]]; then
         log ERROR "Config Missing (LOGIN_DATA:) in config.user${1}.env !"
         log ERROR "Please Check Config!"
         exit 1
+        SKIP_RUN=1
     fi
 
 }
@@ -105,7 +109,7 @@ report() {
     echo $RESULT | grep true >/dev/null
     if (($? != 0)); then
         log ERROR "USER=${USER1} 打卡失败！ Result: ${RESULT}"
-        exit 2
+      #  exit 2
     else
         log "USER=${USER1} 打卡成功！ Result: ${RESULT}"
     fi
